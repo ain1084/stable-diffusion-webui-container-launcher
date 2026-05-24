@@ -1,0 +1,34 @@
+{
+    "name": "stable-diffusion-webui-container",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            // Specify the commit for stable-diffusion-webui.
+            // If not specified, the default value shown in the commented-out line is used.
+            // "SD_WEBUI_COMMIT": "1937682a20f7f0442311a1ede68f9f0cb480163b",
+        }
+    },
+    "runArgs": [
+        "--gpus=all",
+        "--shm-size=16gb"
+    ],
+    "hostRequirements": {
+        "gpu": true
+    },
+    "mounts": [
+        "source=/etc/localtime,target=/etc/localtime,type=bind,readonly",
+        // Bind user-managed directories from the workspace to the WebUI directory.
+        "source=${localWorkspaceFolder}/stable-diffusion-webui/models/Stable-diffusion,target=/opt/stable-diffusion-webui/models/Stable-diffusion,type=bind",
+        "source=${localWorkspaceFolder}/stable-diffusion-webui/models/Lora,target=/opt/stable-diffusion-webui/models/Lora,type=bind",
+        "source=${localWorkspaceFolder}/stable-diffusion-webui/extensions,target=/opt/stable-diffusion-webui/extensions,type=bind",
+        "source=${localWorkspaceFolder}/stable-diffusion-webui/outputs,target=/opt/stable-diffusion-webui/outputs,type=bind",
+        "source=${localWorkspaceFolder}/stable-diffusion-webui/log,target=/opt/stable-diffusion-webui/log,type=bind"
+        // (Example): if you have a shared directory on your host for configs and models, you can bind it like this:
+        // "source=${localEnv:HOME}/shared/sd/models/checkpoints,target=/opt/stable-diffusion-webui/models/Stable-diffusion,type=bind",
+        // "source=${localEnv:HOME}/shared/sd/models/loras,target=/opt/stable-diffusion-webui/models/Lora,type=bind",
+        // "source=${localEnv:HOME}/shared/sd/extensions,target=/opt/stable-diffusion-webui/extensions,type=bind",
+        // "source=${localEnv:HOME}/shared/sd/outputs,target=/opt/stable-diffusion-webui/outputs,type=bind",
+        // "source=${localEnv:HOME}/shared/sd/log,target=/opt/stable-diffusion-webui/log,type=bind"
+    ],
+    "postCreateCommand": "cat ${containerWorkspaceFolder}/.devcontainer/WELCOME.txt"
+}

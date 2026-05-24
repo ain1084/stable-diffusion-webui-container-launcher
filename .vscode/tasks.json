@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Stable Diffusion WebUI",
+      "type": "shell",
+      "command": "./webui.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "/opt/stable-diffusion-webui",
+        "env": {
+          "COMMANDLINE_ARGS": "--api --opt-sdp-attention",
+          "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+          "python_cmd": "/opt/stable-diffusion-webui/.venv/bin/python",
+          "venv_dir": "-",
+        }
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+      }
+    }
+  ]
+}
