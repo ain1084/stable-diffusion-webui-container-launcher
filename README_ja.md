@@ -1,4 +1,4 @@
-# stable-diffusion-webui-devcontainer
+# stable-diffusion-webui-container
 
 VSCode Dev Containers を使用して Stable Diffusion WebUI を Docker コンテナ内で実行するための環境です。
 
