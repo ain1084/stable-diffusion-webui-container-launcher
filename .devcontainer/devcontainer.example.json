@@ -6,6 +6,10 @@
             // Specify the commit for stable-diffusion-webui.
             // If not specified, the default value shown in the commented-out line is used.
             // "SD_WEBUI_COMMIT": "1937682a20f7f0442311a1ede68f9f0cb480163b",
+
+            // Override PyTorch installation command (e.g., for specific CUDA version).
+            // If omitted, defaults to "pip install torch" (latest version).
+            // "TORCH_INSTALL_COMMAND": "pip install torch --index-url https://download.pytorch.org/whl/cu124"
         }
     },
     "runArgs": [

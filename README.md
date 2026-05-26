@@ -8,8 +8,9 @@ An environment for running Stable Diffusion WebUI in a Docker container using VS
 
 * Support for recent NVIDIA GPUs (Blackwell generation)
 * Uses SDP Attention (xformers not required)
-* VSCode Dev Containers workflow
+* VSCode Dev Containers workflow - no Dockerfile customization needed
 * Bind-mount for models and outputs
+* Minimal setup - only devcontainer.json configuration required
 
 This is not a beginner-friendly one-click installer. At least basic knowledge of Docker, VSCode Dev Containers, and Linux command-line operations is required.
 
@@ -155,6 +156,29 @@ This will recreate the container with the new mount settings.
 
 * **Save important data to the host (workspace)**  
   It's recommended to save models, generated images, and configuration files to bind-mounted host directories to preserve them.
+
+#### 2.3 Customize PyTorch Installation Command (Optional)
+
+By default, PyTorch is installed using `pip install torch`, which installs the latest version. On older GPUs, the latest version of PyTorch may not work. In that case, specify the corresponding CUDA version.
+
+**How to Configure:**
+
+Specify `TORCH_INSTALL_COMMAND` in the `args` section of `devcontainer.json`:
+
+```json
+"args": {
+    "TORCH_INSTALL_COMMAND": "pip install torch --extra-index-url https://download.pytorch.org/whl/cu124"
+}
+```
+
+**Recommended CUDA Versions by GPU Generation:**
+
+Refer to the table below as a guide:
+
+| GPU Generation | Recommended CUDA Version | Configuration Example |
+| --- | --- | --- |
+| Pascal Generation (GeForce GTX 10xx Series, etc.) | cu121 / cu124 | `pip install torch --extra-index-url https://download.pytorch.org/whl/cu124` |
+| RTX 20/30/40/50 Series | Latest version | `pip install torch`（default） |
 
 ### 3. Open in VSCode and Reopen in Container
 

@@ -1,6 +1,10 @@
 # Build arguments for specific commits of the stable-diffusion-webui
 ARG SD_WEBUI_COMMIT="1937682a20f7f0442311a1ede68f9f0cb480163b"
 
+# PyTorch install command (can be overridden for specific CUDA builds).
+# Example for CUDA 12.4: "pip install torch --index-url https://download.pytorch.org/whl/cu124"
+ARG TORCH_INSTALL_COMMAND="pip install torch"
+
 # Define environment variables for directory paths
 ARG SD_WEBUI_DIR=/opt/stable-diffusion-webui
 ARG SD_VENV_DIR="${SD_WEBUI_DIR}/.venv"
@@ -44,6 +48,7 @@ FROM base AS venv
 
 ARG SD_VENV_DIR
 ARG SD_WEBUI_COMMIT
+ARG TORCH_INSTALL_COMMAND
 ARG PYTHON_BIN
 ARG USER_UID
 ARG USER_GID
@@ -54,6 +59,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=${UV_INSTALL
 USER ${USER_UID}:${USER_GID}
 RUN "${PYTHON_BIN}" -m venv "${SD_VENV_DIR}" && \
     curl https://raw.githubusercontent.com/AUTOMATIC1111/stable-diffusion-webui/${SD_WEBUI_COMMIT}/requirements_versions.txt -o /tmp/requirements_versions.txt && \
+    "${UV_INSTALL_DIR}/uv" ${TORCH_INSTALL_COMMAND} torchvision --python "${SD_VENV_DIR}/bin/python" --no-cache-dir --link-mode=copy && \
     "${UV_INSTALL_DIR}/uv" pip install --python "${SD_VENV_DIR}/bin/python" --no-cache-dir --link-mode=copy -r /tmp/requirements_versions.txt
 
 # =============== Application assembly stage ===============
